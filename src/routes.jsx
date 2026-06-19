@@ -9,6 +9,7 @@ import { Layout } from "./pages/Layout";
 import Contact from "./pages/Contact";
 import AddContact from "./pages/AddContact";
 import EditContact from "./pages/EditContact";
+import ContactNotFound from "./components/ContactNotFound";
 // import EditContact from "./pages/EditContact";
 
 export const router = createBrowserRouter(
@@ -26,6 +27,7 @@ export const router = createBrowserRouter(
         <Route path= "/" element={<Contact />} />
         <Route path= "/create-contact" element={<AddContact />} />
         <Route path= "/edit-contact/:id" element={<EditContact />} />
+        <Route path= "/error-404" element={<ContactNotFound />} />
       </Route>
     )
 );

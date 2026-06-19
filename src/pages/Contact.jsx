@@ -1,40 +1,20 @@
 import { Pencil, Trash2 } from "lucide-react";
 import ContactCard from "../components/ContactCard";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import contactServices from "../services/contactServices";
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export default function Contact() {
-    const [contacts, setContacts] = useState([
-        {
-          name: "David",
-          phone: "(870) 288-4149",
-          email: "mike.ana@example.com",
-          address: "5842 Hillcrest Rd",
-          id: 1
-        },
-        {
-          name: "Jonathan",
-          phone: "(870) 288-4149",
-          email: "mike.ana@example.com",
-          address: "5842 Hillcrest Rd",
-          id: 2
-        },
-        {
-          name: "Frank",
-          phone: "(870) 288-4149",
-          email: "mike.ana@example.com",
-          address: "5842 Hillcrest Rd",
-          id: 3
-        },
-        {
-          name: "Alvaro",
-          phone: "(870) 288-4149",
-          email: "mike.ana@example.com",
-          address: "5842 Hillcrest Rd",
-          id: 4
-        }
-    ])
-
+    const { store, dispatch } = useGlobalReducer()
+    const contacts = store.contactList
+    const [numberDelete, setNumberDelete] = useState(null)
+    async function handleDelete() {
+        await contactServices.deleteContact(numberDelete)
+        dispatch({ type: 'deleteContactList', payload: numberDelete })
+        const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+        modal.hide();
+    }
     return (
         <>
             <div className="bg-light py-4">
@@ -52,9 +32,9 @@ export default function Contact() {
 
                         <div className="list-group list-group-flush">
                             {
-                                contacts.map((contact)=>{
+                                contacts.map((contact) => {
                                     return (
-                                        <ContactCard key={contact.id} contact={contact} />
+                                        <ContactCard key={contact.id} contact={contact} setNumberDelete={setNumberDelete} />
                                     )
                                 })
                             }
@@ -63,16 +43,16 @@ export default function Contact() {
                 </div>
             </div>
 
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal fade" id="deleteModal" tabIndex="-1" data-bs-backdrop="static" aria-labelledby="deleteModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">Are you sure?</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h1 className="modal-title fs-5" id="deleteModalLabel">Are you sure?</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={()=>{setNumberDelete(null)}}></button>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                            <button type="button" className="btn btn-primary">Yes</button>
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={()=>{setNumberDelete(null)}}>No</button>
+                            <button type="button" className="btn btn-primary" onClick={()=>{handleDelete()}}>Yes</button>
                         </div>
                     </div>
                 </div>

@@ -1,8 +1,8 @@
 import { Mail, MapPin, Pencil, Phone, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export default function ContactCard({ contact }) {
-
+export default function ContactCard({ contact, setNumberDelete }) {
+    
 
 
     return (
@@ -30,12 +30,12 @@ export default function ContactCard({ contact }) {
                 </div>
 
                 <div className="d-flex gap-2">
-                    <Link to="edit-contact/1">
+                    <Link to={`edit-contact/${contact.id}`}>
                         <button className="btn btn-warning text-muted p-2">
                             <Pencil color="white" />
                         </button>
                     </Link>
-                    <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" className="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={()=>setNumberDelete(contact.id)}>
                         <Trash2 color="white" />
                     </button>
                 </div>
